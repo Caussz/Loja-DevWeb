@@ -7,7 +7,8 @@ const totalProdutos = ref(0);
 const totalPreco = ref(0);
 const mostrarCarrinho = ref(true);
 const mostrar = ref(false);
-
+const erro0 = ref(false)
+const sucess = ref(false)
 const novoItem = ref({
   id: 0,
   nome: "",
@@ -27,6 +28,7 @@ function adicionar(id) {
   novoItem.value.id = 0;
   novoItem.value.nome = "";
   novoItem.value.preco = 0;
+  sucess.value = true
   calcularTotal();
 }
 
@@ -47,6 +49,7 @@ function verMais(index) {
 
 function remover(index) {
   carrinho.value.splice(index, 1);
+  if (carrinho.value.length == 0) erro0.value = true;
   calcularTotal();
 }
 
@@ -59,10 +62,19 @@ function calcularTotal() {
   <header v-if="mostrarCarrinho && mostrar == false">
     <h1>Produtos</h1>
     <button class="cart-button" @click="mostrarCarrinho = false">
-      Meu carrinho ({{ totalProdutos }})
+     Meu carrinho ({{ totalProdutos }})
     </button>
   </header>
+
+  <div v-if="sucess" class="alert-sucess">
+    <span class="closebtn" @click="sucess = false">&times;</span>
+    <strong>Sucesso! Item adicionado ao carrinho...</strong> {{ text }}
+  </div>
   <div v-if="mostrar">
+    <div v-if="erro0" class="alert">
+      <span class="closebtn" @click="erro0 = false">&times;</span>
+      <strong>Erro! Primeiro adicione um item...</strong> {{ text }}
+    </div>
     <main class="container">
       <div class="produto-info">
         <img :src="novoItem.img" :alt="novoItem.nome" />
@@ -70,7 +82,11 @@ function calcularTotal() {
         <p>{{ novoItem.desc }}</p>
         <p>R$ {{ novoItem.preco.toFixed(2) }}</p>
       </div>
-      <button class="ver-mais" @click="mostrar = !mostrar">Voltar</button>
+      <div class="dual">
+        <button class="add-button" @click="adicionar(index)">Adicionar</button>
+        <button class="remove-button" @click="remover(index)">Remover</button>
+      </div>
+      <button class="ver-mais" @click="mostrar = false">Menos info...</button>
     </main>
   </div>
 
@@ -86,8 +102,10 @@ function calcularTotal() {
             <p>{{ produto.descricao }}</p>
             <p>R$ {{ produto.preco.toFixed(2) }}</p>
           </div>
-          <button class="remove-button" @click="remover(index)">Remover</button>
-          <button class="add-button" @click="adicionar(index)">Adicionar</button>
+          <div class="dual">
+            <button class="add-button" @click="adicionar(index)">Adicionar</button>
+            <button class="remove-button" @click="remover(index)">Remover</button>
+          </div>
           <button class="ver-mais" @click="verMais(index)">Mais info...</button>
         </div>
       </div>
@@ -108,8 +126,10 @@ function calcularTotal() {
               <h3>{{ item.nome }}</h3>
               <p>R$ {{ item.preco.toFixed(2) }}</p>
             </div>
-            <button class="remove-button" @click="remover(index)">Remover</button>
+                 <div class="dual">
             <button class="add-button" @click="adicionar(item.id)">Adicionar</button>
+            <button class="remove-button" @click="remover(index)">Remover</button>
+          </div>
           </div>
           <div class="carrinho-total">
             <p>Total: R$ {{ totalPreco.toFixed(2) }}</p>
@@ -118,11 +138,18 @@ function calcularTotal() {
         </div>
       </div>
     </main>
-    <button class="close-button" @click="mostrarCarrinho = true">Voltar ao inicio</button>
+    <button class="btn" @click="mostrarCarrinho = true">Voltar ao inicio</button>
   </div>
 </template>
 
 <style scoped>
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #d6c292e8;
+  padding: 10px;
+}
 main.container {
   background-color: #d6c292e8;
   min-width: 320px;
@@ -130,6 +157,17 @@ main.container {
   padding: 2rem;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
+}
+.btn{
+  width: 90vh;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 30px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 main h2 {
@@ -143,20 +181,20 @@ img {
   max-height: 280px;
   border-radius: 5px;
 }
+.btn:hover{
+  background-color: #80baf8;
+  color: #000000;
+  font-weight: bold;
+}
 .container {
   width: 80%;
   margin: auto;
   padding: 20px;
 }
-
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #d6c292e8;
-  padding: 10px;
+.dual{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
-
 .cart-button {
   background-color: transparent;
   border: 2px solid #fff;
@@ -226,13 +264,20 @@ header {
 .add-button {
   background-color: #007bff;
   color: #fff;
-  border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-right: 5px;
 }
 
+.remove-button {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 10px;
+  margin-left: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 .ver-mais {
   background-color: #3d2e1e;
   color: #fff;
@@ -287,20 +332,48 @@ header {
   text-align: center;
 }
 
-.remove-button {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .carrinho-total {
   margin-top: 20px;
   text-align: right;
 }
 
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  width: 50%;
+  margin-top: 10px;
+  margin-left:290px ;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.alert-sucess {
+  padding: 20px;
+  background-color: #36f44f;
+  color: rgb(255, 255, 255);
+  width: 50%;
+  margin-top: 10px;
+  margin-left:290px ;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.closebtn {
+  margin-top: 3px;
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
 @media (max-width: 480px) {
   main.container {
     min-height: 50vh;
