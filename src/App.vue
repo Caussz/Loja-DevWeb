@@ -57,6 +57,19 @@ function calcularTotal() {
   totalProdutos.value = carrinho.value.length;
   totalPreco.value = carrinho.value.reduce((total, item) => total + item.preco, 0);
 }
+
+function filtrarPorCategoria(categoria) {
+  return produtos.filter((produto) => produto.categoria === categoria);
+}
+
+function buscarPorNome(nome) {
+  return produtos.filter((produto) => produto.nome.toLowerCase().includes(nome.toLowerCase()));
+}
+
+function ordenarPorPreco() {
+  produtos.sort((a, b) => a.preco - b.preco);
+}
+
 </script>
 <template>
   <header v-if="mostrarCarrinho && mostrar == false">
