@@ -29,6 +29,7 @@ function adicionar(id) {
   novoItem.value.nome = "";
   novoItem.value.preco = 0;
   sucess.value = true
+  //erro0.value = false
   calcularTotal();
 }
 
@@ -49,7 +50,9 @@ function verMais(index) {
 
 function remover(index) {
   carrinho.value.splice(index, 1);
-  if (carrinho.value.length == 0) erro0.value = true;
+  erro0.value = true;
+  console.log(erro0.value)
+  sucess.value = false
   calcularTotal();
 }
 
@@ -58,17 +61,6 @@ function calcularTotal() {
   totalPreco.value = carrinho.value.reduce((total, item) => total + item.preco, 0);
 }
 
-function filtrarPorCategoria(categoria) {
-  return produtos.filter((produto) => produto.categoria === categoria);
-}
-
-function buscarPorNome(nome) {
-  return produtos.filter((produto) => produto.nome.toLowerCase().includes(nome.toLowerCase()));
-}
-
-function ordenarPorPreco() {
-  produtos.sort((a, b) => a.preco - b.preco);
-}
 
 </script>
 <template>
@@ -83,11 +75,12 @@ function ordenarPorPreco() {
     <span class="closebtn" @click="sucess = false">&times;</span>
     <strong>Sucesso! Item adicionado ao carrinho...</strong> {{ text }}
   </div>
+  <div v-if="erro0" class="alert">
+    <span class="closebtn" @click="erro0 = false">&times;</span>
+    <strong>Erro! Primeiro adicione um item...</strong> {{ text }}
+  </div>
   <div v-if="mostrar">
-    <div v-if="erro0" class="alert">
-      <span class="closebtn" @click="erro0 = false">&times;</span>
-      <strong>Erro! Primeiro adicione um item...</strong> {{ text }}
-    </div>
+    
     <main class="container">
       <div class="produto-info">
         <img :src="novoItem.img" :alt="novoItem.nome" />
@@ -112,11 +105,10 @@ function ordenarPorPreco() {
               <img :src="produto.img" :alt="produto.nome" />
             </div>
             <h2>{{ produto.nome }}</h2>
-            <p>{{ produto.descricao }}</p>
             <p>R$ {{ produto.preco.toFixed(2) }}</p>
           </div>
           <div class="dual">
-            <button class="add-button" @click="adicionar(index)">Adicionar</button>
+            <button class="add-button" @click="adicionar(index + 1)">Adicionar</button>
             <button class="remove-button" @click="remover(index)">Remover</button>
           </div>
           <button class="ver-mais" @click="verMais(index)">Mais info...</button>
@@ -356,7 +348,7 @@ img {
   color: white;
   width: 50%;
   margin-top: 10px;
-  margin-left:290px ;
+  margin-left: 25%;
   border-radius: 10px;
   text-align: center;
 }
@@ -367,7 +359,7 @@ img {
   color: rgb(255, 255, 255);
   width: 50%;
   margin-top: 10px;
-  margin-left:290px ;
+  margin-left: 25% ;
   border-radius: 10px;
   text-align: center;
 }
