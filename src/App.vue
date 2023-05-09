@@ -7,20 +7,26 @@ const totalProdutos = ref(0);
 const totalPreco = ref(0);
 const mostrarCarrinho = ref(true);
 const mostrar = ref(false);
-const erro0 = ref(false)
 const sucess = ref(false)
 const novoItem = ref({
   id: 0,
   nome: "",
+  quant: 1,
   preco: 0,
+  precoTotal() {
+    console.log(this.preco)
+    return this.preco * this.quant
+  },
   img: "",
   desc: "",
 });
 
 function adicionar(id) {
-  const produtoSelecionado = produtos.find((produto) => produto.id === id);
+
+  const produtoSelecionado = produtos.find((produto) => produto.id == id);
   novoItem.value.id = produtoSelecionado.id;
   novoItem.value.nome = produtoSelecionado.nome;
+  novoItem.value.quant = produtoSelecionado.quant;
   novoItem.value.preco = produtoSelecionado.preco;
   novoItem.value.img = produtoSelecionado.img;
   novoItem.value.desc = produtoSelecionado.desc;
@@ -29,7 +35,6 @@ function adicionar(id) {
   novoItem.value.nome = "";
   novoItem.value.preco = 0;
   sucess.value = true
-  //erro0.value = false
   calcularTotal();
 }
 
@@ -50,8 +55,6 @@ function verMais(index) {
 
 function remover(index) {
   carrinho.value.splice(index, 1);
-  erro0.value = true;
-  console.log(erro0.value)
   sucess.value = false
   calcularTotal();
 }
@@ -60,7 +63,6 @@ function calcularTotal() {
   totalProdutos.value = carrinho.value.length;
   totalPreco.value = carrinho.value.reduce((total, item) => total + item.preco, 0);
 }
-
 
 </script>
 <template>
@@ -74,10 +76,6 @@ function calcularTotal() {
   <div v-if="sucess" class="alert-sucess">
     <span class="closebtn" @click="sucess = false">&times;</span>
     <strong>Sucesso! Item adicionado ao carrinho...</strong> {{ text }}
-  </div>
-  <div v-if="erro0" class="alert">
-    <span class="closebtn" @click="erro0 = false">&times;</span>
-    <strong>Erro! Primeiro adicione um item...</strong> {{ text }}
   </div>
   <div v-if="mostrar">
     
@@ -105,7 +103,7 @@ function calcularTotal() {
               <img :src="produto.img" :alt="produto.nome" />
             </div>
             <h2>{{ produto.nome }}</h2>
-            <p>R$ {{ produto.preco.toFixed(2) }}</p>
+            <p>R$ {{ produto.precoTotal().toFixed(2) }}</p>
           </div>
           <div class="dual">
             <button class="add-button" @click="adicionar(index + 1)">Adicionar</button>
