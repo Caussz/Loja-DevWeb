@@ -1,8 +1,11 @@
-export const produtos = [
+import { ref } from 'vue'
+
+
+export const produtos = ref([
     {
         id: 1,
         nome: 'Camiseta',
-        quant: 5,
+        quant: 1,
         preco: 49.90,
         precoTotal() { return this.preco * this.quant} ,
         img: 'https://images.tcdn.com.br/img/img_prod/809258/camiseta_preta_malha_pv_manga_curta_gola_redonda_267_1_691009fed2c687cf9c88e74f6a4ebbf3.jpg',
@@ -89,4 +92,4 @@ export const produtos = [
         desc: 'ccccc',
         categoria: 'roupas de baixo'
     }
-]
+])

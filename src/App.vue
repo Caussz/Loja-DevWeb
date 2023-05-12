@@ -14,7 +14,6 @@ const novoItem = ref({
   quant: 1,
   preco: 0,
   precoTotal() {
-    console.log(this.preco)
     return this.preco * this.quant
   },
   img: "",
@@ -22,12 +21,12 @@ const novoItem = ref({
 });
 
 function adicionar(id) {
-
-  const produtoSelecionado = produtos.find((produto) => produto.id == id);
+  const produtoSelecionado = produtos.value.find((produto) => produto.id == id);
+// const produtoSelecionado = produtos[index];
   novoItem.value.id = produtoSelecionado.id;
   novoItem.value.nome = produtoSelecionado.nome;
   novoItem.value.quant = produtoSelecionado.quant;
-  novoItem.value.preco = produtoSelecionado.preco;
+  novoItem.value.preco = produtoSelecionado.precoTotal();
   novoItem.value.img = produtoSelecionado.img;
   novoItem.value.desc = produtoSelecionado.desc;
   carrinho.value.push({ ...novoItem.value });
@@ -37,6 +36,7 @@ function adicionar(id) {
   sucess.value = true
   calcularTotal();
 }
+
 
 function limparCarrinho() {
   carrinho.value = [];
@@ -84,7 +84,7 @@ function calcularTotal() {
         <img :src="novoItem.img" :alt="novoItem.nome" />
         <h2>{{ novoItem.nome }}</h2>
         <p>{{ novoItem.desc }}</p>
-        <p>R$ {{ novoItem.preco.toFixed(2) }}</p>
+        <p>R$ {{ novoItem.precoTotal }}</p>
       </div>
       <div class="dual">
         <button class="add-button" @click="adicionar(index)">Adicionar</button>
@@ -106,10 +106,11 @@ function calcularTotal() {
             <p>R$ {{ produto.precoTotal().toFixed(2) }}</p>
           </div>
           <div class="dual">
-            <button class="add-button" @click="adicionar(index + 1)">Adicionar</button>
-            <button class="remove-button" @click="remover(index)">Remover</button>
+            <button class="add-button" @click="produto.quant++">Adicionar ({{ produto.quant }})</button>
+            <button class="remove-button" @click="produto.quant--">Remover ({{ produto.quant }})</button>
           </div>
           <button class="ver-mais" @click="verMais(index)">Mais info...</button>
+          <button class="ver-mais" @click="adicionar(produto.id)">adicionar todos</button>
         </div>
       </div>
     </div>
@@ -127,7 +128,7 @@ function calcularTotal() {
           <div v-for="(item, index) of carrinho" :key="item.id" class="carrinho-item">
             <div class="carrinho-item-info">
               <h3>{{ item.nome }}</h3>
-              <p>R$ {{ item.preco.toFixed(2) }}</p>
+              <p>R$ {{ item.preco }}</p>
             </div>
                  <div class="dual">
             <button class="add-button" @click="adicionar(item.id)">Adicionar</button>
@@ -135,7 +136,7 @@ function calcularTotal() {
           </div>
           </div>
           <div class="carrinho-total">
-            <p>Total: R$ {{ totalPreco.toFixed(2) }}</p>
+            <p>Total: R$ {{ totalPreco }}</p>
             <button class="remove-button" @click="limparCarrinho">Limpar carrinho</button>
           </div>
         </div>
