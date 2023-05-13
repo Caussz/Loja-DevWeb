@@ -1,29 +1,38 @@
-# site-de-compras
+<p align="center">
+<a href="#"><img title="Loja DevWeb" src="https://img.shields.io/badge/Trabalho trimestral DevWeb-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
+</p>
+<p align="center">
+<a href="https://github.com/Caussz"><img title="Author" src="https://img.shields.io/badge/Author-Caussz-red.svg?style=for-the-badge&logo=github"></a>
+</p>
 
-This template should help get you started developing with Vue 3 in Vite.
+## Clone esse projeto
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```bash
+> git clone https://github.com/Caussz/loja-DevWeb
 ```
 
-### Compile and Hot-Reload for Development
+## Instale as dependencias do site:
 
-```sh
-npm run dev
+```bash
+> cd loja-DevWeb
+> npm install or npm i
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
+### Para rodar
+```bash
+> npm run dev
+> npm start
 ```
+### Para Usar PM2
+```bash
+> npm i -g pm2 (para instalar)
+
+> Para executar = pm2 start vite
+> depois = pm2 monit
+```
+
+### Agradecimentos
+
+<a href="https://github.com/eduardo-da-silva"><img alt="GitHub" src="https://img.shields.io/badge/eduardo-da-silva06%20-%23121011.svg?&style=for-the-badge&logo=github&logoColor=white"/></a>
+
+
