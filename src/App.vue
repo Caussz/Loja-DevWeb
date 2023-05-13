@@ -37,6 +37,11 @@ function adicionar(id) {
   calcularTotal();
 }
 
+function remove(produto, index) {
+  if(produto[index].quant > 1){
+    produto[index].quant--;
+  }
+}
 
 function limparCarrinho() {
   carrinho.value = [];
@@ -44,7 +49,7 @@ function limparCarrinho() {
 }
 
 function verMais(index) {
-  const produtoSelecionado = produtos[index];
+  const produtoSelecionado = produtos.value[index];
   novoItem.value.id = produtoSelecionado.id;
   novoItem.value.nome = produtoSelecionado.nome;
   novoItem.value.preco = produtoSelecionado.preco;
@@ -61,7 +66,7 @@ function remover(index) {
 
 function calcularTotal() {
   totalProdutos.value = carrinho.value.length;
-  totalPreco.value = carrinho.value.reduce((total, item) => total + item.preco, 0);
+  totalPreco.value = carrinho.value.reduce((total, item) => total + item.precoTotal(), 0);
 }
 
 </script>
@@ -84,7 +89,7 @@ function calcularTotal() {
         <img :src="novoItem.img" :alt="novoItem.nome" />
         <h2>{{ novoItem.nome }}</h2>
         <p>{{ novoItem.desc }}</p>
-        <p>R$ {{ novoItem.precoTotal }}</p>
+        <p>R$ {{ novoItem.precoTotal() }}</p>
       </div>
       <div class="dual">
         <button class="add-button" @click="adicionar(index)">Adicionar</button>
@@ -136,7 +141,7 @@ function calcularTotal() {
           </div>
           </div>
           <div class="carrinho-total">
-            <p>Total: R$ {{ totalPreco }}</p>
+            <p>Total: R$ {{ totalPreco.toFixed(2) }}</p>
             <button class="remove-button" @click="limparCarrinho">Limpar carrinho</button>
           </div>
         </div>
